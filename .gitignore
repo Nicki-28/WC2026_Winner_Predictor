@@ -1,0 +1,5 @@
+venv/
+config.py
+*.csv
+__pycache__
+.DS_Store
