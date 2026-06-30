@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score, classification_report
 # from 1990 to 2014 we be use to train and from 2018 to 2022 to test our model 
 df_ready = pd.read_csv('../data/processed/matches_con_features.csv')
 
-data_training = df_ready[df_ready['year'] <= 2014] #836 matches
+
 data_testing = df_ready[df_ready['year'] > 2014] #64 matches
 
 
