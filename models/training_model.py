@@ -37,3 +37,16 @@ y_pred = forest.predict(X_test_num)
 
 precision = accuracy_score(y_test, y_pred)
 print(f"¡training complete! Precision: {precision * 100:.2f}%")
+
+# ==========================================
+# STEP 2: predicting world cup 2026
+# ==========================================
+
+average_goals = joblib.load('../data/processed/promedios_historicos.pkl') 
+
+df_calendario = pd.read_csv('../data/processed/calendario_2026_limpio.csv')
+
+#we are going to add the new data about the world cup, updated 30/06/26 to the data we already worked on
+
+today_away_team = df_calendario['away_team']
+today_home_team= df_calendario['home_team']
