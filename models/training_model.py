@@ -2,6 +2,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
+import joblib
+
+# ==========================================
+# STEP 1: training our model with wc history
+# ==========================================
+
+
 # we are going to split cronologically our data, to train and to test
 # from 1990 to 2014 we be use to train and from 2018 to 2022 to test our model 
 df_ready = pd.read_csv('../data/processed/matches_con_features.csv')
