@@ -3,7 +3,7 @@
 ## Overview
 A Machine Learning project designed to predict the outcomes of the 2026 FIFA World Cup. Built entirely from scratch as a personal deep-dive into Data Science, this project processes historical match data from 1930 onwards to build progressive, dynamic features (such as historical goal averages). By simulating a "time machine" approach during feature engineering, the model strictly avoids Data Leakage, proving that with the right logic, raw football history can be turned into a smart predictive algorithm.
 
-## 🧠 The Learning Journey & Core Concepts
+## The Learning Journey & Core Concepts
 Throughout the development of this model, I focused on understanding the "why" behind the code, tackling complex data challenges such as:
 
 * **Feature Engineering:** Transforming raw match results into dynamic, progressive statistics (like historical goal averages prior to kick-off).
@@ -16,7 +16,7 @@ Throughout the development of this model, I focused on understanding the "why" b
 * **Libraries:** Pandas, NumPy, Seaborn, Matplotlib, Scikit-Learn
 * **Environment:** Jupyter Notebook (Data Exploration & Processing) & Python Scripts (Model Training & Simulation)
 
-## 📊 Data Strategy & Model Architecture
+## Data Strategy & Model Architecture
 The model trains on historical international football matches from 1930 to 2022. It filters out statistical "noise" (like IDs, referees, or stadium capacities) and engineers smart features to predict the target variable of future matches.
 
 * **Algorithm:** Random Forest Classifier (an ensemble of decision trees to capture the non-linear chaos of football).
