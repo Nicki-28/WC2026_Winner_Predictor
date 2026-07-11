@@ -62,16 +62,28 @@ for partido in datos_reales:
         historia_eq1 = average_goals.get(equipo_1, 0.0)
         historia_eq2 = average_goals.get(equipo_2, 0.0)
         
-        # we average the historical data with the new one
-        average_goals[equipo_1] = (historia_eq1 + goles_eq1) / 2
-        average_goals[equipo_2] = (historia_eq2 + goles_eq2) / 2
+        # we average the historical data with the new one, history weights 80% new results 20%
+        average_goals[equipo_1] = (historia_eq1 * 0.8) + (goles_eq1 * 0.2)
+        average_goals[equipo_2] = (historia_eq2 * 0.8) + (goles_eq2 * 0.2)
     
+stage_map = {
+    'Round of 32': 'round of 16',
+    'Round of 16': 'round of 16',
+    'Quarter-final': 'quarter-finals',
+    'Semi-final': 'semi-finals',
+    'Match for third place': 'third-place match',
+    'Final': 'final',
+}
+ 
+
 # we will use our adapted model to predict the future winners
-def predict_game(equipo_local, equipo_visitante):
+def predict_game(equipo_local, equipo_visitante,year, stage_name):
     avg_local = average_goals.get(equipo_local, 0.0)
     avg_visit = average_goals.get(equipo_visitante, 0.0)
     
     df_partido = pd.DataFrame({
+        'year': [year],  
+        'stage_name': [stage_name],
         'home_team_name': [equipo_local],
         'away_team_name': [equipo_visitante],
         'home_team_avg_goals': [avg_local],
@@ -90,33 +102,55 @@ losers= {}
 with open('../data/raw-newWc/worldcup.json', 'r', encoding='utf-8') as f:
     datos_reales = json.load(f)['matches']
 
-    df_2026= pd.read_csv('../data/processed/calendario_2026_limpio.csv')
+winners = {}
+losers = {}
 
-    for index, row in datos_reales:
-        home_team = row['home_team_name']
-        away_team = row['away_team_name']
-        stage = row['stage']
+
+for partido in datos_reales:
+    
+    
+    home_team = partido['team1']
+    away_team = partido['team2']
+    stage = partido['round']
+    num_match = partido.get('num', 0)
+    # Nos saltamos la fase de grupos
+    if 'Matchday' in stage:
+        continue
+    
+    
+    if str(home_team).startswith('W'):
+        id_prev = int(home_team[1:])
+        home_team = winners[id_prev] 
+    elif str(home_team).startswith('L'):
+        id_prev = int(home_team[1:])
+        home_team = losers[id_prev] 
         
-        num_match = index + 1
+    if str(away_team).startswith('W'):
+        id_prev = int(away_team[1:])
+        away_team = winners[id_prev]
+    elif str(away_team).startswith('L'):
+        id_prev = int(away_team[1:])
+        away_team = losers[id_prev]
         
-        if str(home_team).startswith('W'):
-            id_prev = int(home_team[1:])
-            home_team = winners[id_prev] 
-        elif str(home_team).startswith('L'):
-            id_prev = int(home_team[1:])
-            home_team = losers[id_prev] 
-            
-        if str(away_team).startswith('W'):
-            id_prev = int(away_team[1:])
-            away_team = winners[id_prev]
-        elif str(away_team).startswith('L'):
-            id_prev = int(away_team[1:])
-            away_team = losers[id_prev]
-            
-        print(f' {stage} | {home_team} vs {away_team}')
-            
-        result = predict_game(home_team, away_team)
+    print(f' {stage} | {home_team} vs {away_team}')
         
+    if 'score' in partido and partido['score'] is not None:
+        
+        goles_home = partido['score']['ft'][0]
+        goles_away = partido['score']['ft'][1]
+        
+        if goles_home > goles_away:
+            winner = home_team
+            loser = away_team
+        else:
+            winner = away_team
+            loser = home_team
+            
+    else:
+        
+        stage_csv = stage_map.get(stage, stage.lower())
+        result = predict_game(home_team, away_team, 2026, stage_csv)
+                   
         if result == 'home team win':
             winner = home_team
             loser = away_team
@@ -131,9 +165,8 @@ with open('../data/raw-newWc/worldcup.json', 'r', encoding='utf-8') as f:
                 winner = away_team
                 loser = home_team
                 
-        losers[num_match] = loser # we save the loser
-        winners[num_match] = winner # we save the winner
-        
-        print(f" Goes to the next round: {winner}\n")
-        
-        
+    
+    losers[num_match] = loser 
+    winners[num_match] = winner 
+    
+    print(f" Goes to the next round: {winner}\n")
