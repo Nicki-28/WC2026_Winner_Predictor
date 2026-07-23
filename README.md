@@ -33,7 +33,8 @@ A custom "Tournament Cascade" script was built to simulate the 2026 knockout bra
 ---
 ## Post-Tournament Update
 **The results are in, and the model was a success!!**
-Our Machine Learning model succesfully and accurately predicted **Spain** as a the outright winner of the 2026 FIFA WORLD CUP 
+Our Machine Learning model succesfully and accurately predicted **Spain** as a the outright winner of the 2026 FIFA WORLD CUP.
+
 While the model perfectly nailed the champion, the predictions for the 2nd and 3rd place finishes were incorrect. This highlights a fascinating aspect of our Data Science approach: the model was exception at identifying the absolute peaj peformer based on progressive
 historical data and goal averages, but the inherent chaos of football bracket eliminations and knockou stages introduced variance in the runner-up positions.
 
